@@ -1,111 +1,42 @@
 {
-  "name": "carbooking",
+  "name": "flutter-api-revalidation-api",
   "version": "1.0.0",
-  "description": "car booking api",
-  "main": "index.js",
+  "description": "",
+  "main": "server.js",
   "scripts": {
-    "build-server": "babel src --out-dir dist",
-    "build": "npm run clean && npm run build-server",
-    "clean": "rm -rf dist && mkdir dist",
-    "test": "NODE_ENV=test nyc mocha ./src/spec/index.spec.js --timeout 5000 --exit",
-    "lint": "eslint '**/*js'",
-    "lint:fix": "prettier-eslint --write '**/*js' ",
-    "seed": "npx sequelize-cli db:seed:all",
-    "migration": "npx sequelize-cli db:migrate",
-    "dev": "nodemon ./src/index.js --exec babel-node",
-    "start": "node dist/index.js",
-    "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "heroku-postbuild": "npm run build && npm run migration"
+    "test": "export NODE_ENV=test && jest --forceExit --detectOpenHandles --verbose  --runInBand --coverage",
+    "lint": "eslint '**/*.js' > logs/lintlog",
+    "lintfix": "eslint '**/*.js' --fix > logs/lintlog",
+    "start": "node server.js",
+    "dev": "export NODE_ENV=development && nodemon server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/akinyeleolat/carBooking.git"
-  },
-  "keywords": [
-    "car",
-    "booking",
-    "auhthentication"
-  ],
-  "author": "Oluwatosin Akinyele",
+  "author": "Edafe",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/akinyeleolat/carBooking/issues"
+  "engines": {
+    "node": "v14.15.1",
+    "npm": "6.14.8"
   },
-  "homepage": "https://github.com/akinyeleolat/carBooking#readme",
   "dependencies": {
-    "@babel/cli": "^7.4.4",
-    "@babel/core": "^7.4.5",
-    "@babel/node": "^7.4.5",
-    "@babel/plugin-transform-runtime": "^7.4.4",
-    "@babel/preset-env": "^7.4.5",
-    "@babel/register": "^7.4.4",
-    "@babel/runtime": "^7.5.4",
-    "babel-plugin-istanbul": "^5.1.4",
-    "babel-plugin-module-resolver": "^3.2.0",
-    "bcryptjs": "^2.4.3",
-    "body-parser": "^1.19.0",
-    "compression": "^1.7.1",
-    "cors": "^2.8.4",
-    "dotenv": "^8.0.0",
+    "@joi/date": "^2.0.1",
+    "compression": "^1.7.4",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "jsonwebtoken": "^8.5.1",
-    "morgan": "^1.10.0",
-    "pg": "^7.11.0",
-    "pg-hstore": "^2.3.2",
-    "sequelize": "^5.8.6",
-    "sequelize-cli": "^5.5.0",
-    "slug": "^1.1.0",
-    "uuid": "^3.3.2",
-    "validatorjs": "^3.15.1",
+    "express-rate-limit": "^5.2.3",
+    "helmet": "^4.3.1",
+    "joi": "^17.3.0",
+    "throng": "^5.0.0",
     "winston": "^3.3.3"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
-    "chai-as-promised": "^7.1.1",
-    "chai-http": "^4.3.0",
-    "chai-uuid": "^1.0.6",
-    "coveralls": "^3.0.3",
-    "eslint": "^6.0.1",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-import-resolver-babel-module": "^5.1.0",
-    "eslint-plugin-import": "^2.17.3",
-    "husky": "^3.0.0",
-    "lint-staged": "^9.2.0",
-    "mocha": "^6.1.4",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.5.1",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jest": "^22.17.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "jest": "^26.6.3",
     "nodemon": "^1.19.1",
-    "nyc": "^14.1.1",
-    "prettier-eslint": "^9.0.0",
     "prettier-eslint-cli": "^5.0.0",
-    "sinon": "^7.3.2",
-    "sinon-chai": "^3.3.0",
-    "sqlite3": "^4.2.0"
-  },
-  "lint-staged": {
-    "*.js": [
-      "eslint --fix",
-      "git add"
-    ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    },
-    "homepage": "https://github.com/andela/king-kong-ah-backend#readme"
-  },
-  "nyc": {
-    "exclude": [
-      "src/spec",
-      "src/models/index.js"
-    ],
-    "require": [
-      "@babel/register"
-    ],
-    "reporter": [
-      "lcov",
-      "text",
-      "html"
-    ],
-    "sourceMap": false,
-    "instrument": false
+    "supertest": "^6.0.1"
   }
 }
