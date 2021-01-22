@@ -27,7 +27,9 @@ const checkRuleValidation = (dataFieldValue, condition, condition_value) => {
       result = dataFieldValue <= condition_value;
       break;
     case 'contains':
-      result = dataFieldValue.includes(condition_value);
+      if ((dataFieldValue instanceof String) || (Array.isArray(dataFieldValue))) {
+        result = dataFieldValue.includes(condition_value);
+      }
       break;
     default:
       result = 'invalid condition';

@@ -10,7 +10,9 @@ const ruleDataSchema = Joi.object({
     field: Joi.string().required(),
     condition: Joi.string().required(),
     condition_value: Joi.required(),
-  }).required(),
+  }).required().messages({
+    'object.base': 'rule should be an object',
+  }),
   data: Joi.alternatives(
     Joi.string(),
     Joi.object(),
@@ -24,43 +26,38 @@ const ruleDataSchema = Joi.object({
  */
 
 const ruleRunnerService = (ruleData) => {
-  try {
-    let isValid = false;
-    let results = null;
-    const {
-      rule, data,
-    } = validatePayload(ruleDataSchema, ruleData);
+  let isValid = false;
+  let results = null;
+  const {
+    rule, data,
+  } = validatePayload(ruleDataSchema, ruleData);
 
-    const { field, condition, condition_value } = rule;
+  const { field, condition, condition_value } = rule;
 
-    const fieldDepth = field.split('.').length;
+  const fieldDepth = field.split('.').length;
 
-    if (fieldDepth >= 3) {
-      throw new Error('badRequestError', 400, 'rule.field has more than two levels of nesting');
-    }
-
-    const dataFieldValue = getDataFieldValue(data, field);
-
-    if (!dataFieldValue) {
-      throw new Error('badRequestError', 400, `field ${field} is missing from the data.`);
-    }
-    isValid = checkRuleValidation(dataFieldValue, condition, condition_value);
-    results = {
-      validation: {
-        error: !isValid,
-        field,
-        field_value: dataFieldValue,
-        condition,
-        condition_value,
-      },
-    };
-    if (!isValid) {
-      throw new Error('validationFailedError', 400, `field ${field} failed validation.`, results);
-    }
-    return results;
-  } catch (error) {
-    return error;
+  if (fieldDepth >= 3) {
+    throw new Error('badRequestError', 400, 'rule.field has more than two levels of nesting');
   }
+  const dataFieldValue = getDataFieldValue(data, field);
+
+  if (!dataFieldValue) {
+    throw new Error('badRequestError', 400, `field ${field} is missing from the data.`);
+  }
+  isValid = checkRuleValidation(dataFieldValue, condition, condition_value);
+  results = {
+    validation: {
+      error: !isValid,
+      field,
+      field_value: dataFieldValue,
+      condition,
+      condition_value,
+    },
+  };
+  if (!isValid) {
+    throw new Error('validationFailedError', 400, `field ${field} failed validation.`, results);
+  }
+  return results;
 };
 
 module.exports = ruleRunnerService;

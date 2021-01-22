@@ -1,15 +1,14 @@
 const ruleRunnerService = require('../../services/reValidateApi/ruleRunner');
 const displayError = require('../../helpers/displayError');
+const displaySuccess = require('../../helpers/displaySuccess');
 
-function reValidateApi(req, res, next) {
+function reValidateApi(req, res) {
   try {
     const result = ruleRunnerService(req.body);
-    if (result instanceof Error) {
-      return displayError(result, res, result.httpStatusCode);
-    }
-    return res.status(200).json(result);
+    const { field } = result.validation;
+    return displaySuccess(result, `field ${field} successfully validated.`, res, 200);
   } catch (error) {
-    return next(error);
+    return displayError(error, res, error.httpStatusCode);
   }
 }
 
