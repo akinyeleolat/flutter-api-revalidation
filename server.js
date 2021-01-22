@@ -1,9 +1,6 @@
 require('dotenv').config();
 
-const throng = require('throng');
-const os = require('os');
-
-const { useClusters, port, clusterWorkers } = require('./config/app');
+const { port } = require('./config');
 const app = require('./app');
 
 function startApp() {
@@ -12,9 +9,4 @@ function startApp() {
   });
 }
 
-if (useClusters) {
-  const throngWorkers = clusterWorkers || os.cpus().length;
-  throng(throngWorkers, startApp);
-} else {
-  startApp();
-}
+startApp();

@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 const Joi = require('joi').extend(require('@joi/date'));
-const errorResponse = require('../../helpers/apiError');
+const Error = require('../../utils/ErrorUtils');
 const validatePayload = require('../../helpers/payloadValidator');
 const getDataFieldValue = require('../../helpers/fieldChecker');
 const checkRuleValidation = require('../../helpers/checkRuleValidation');
@@ -35,28 +35,31 @@ const ruleRunnerService = (ruleData) => {
 
     const fieldDepth = field.split('.').length;
 
-    if (fieldDepth > 3) {
-      return errorResponse.throwError('rule.field has more than two levels of nesting');
+    if (fieldDepth >= 3) {
+      throw new Error('badRequestError', 400, 'rule.field has more than two levels of nesting');
     }
 
     const dataFieldValue = getDataFieldValue(data, field);
 
-    if (dataFieldValue !== false) {
-      isValid = checkRuleValidation(dataFieldValue, condition, condition_value);
-      results = {
-        validation: {
-          error: !isValid,
-          field,
-          field_value: dataFieldValue,
-          condition,
-          condition_value,
-        },
-      };
-      return results;
+    if (!dataFieldValue) {
+      throw new Error('badRequestError', 400, `field ${field} is missing from the data.`);
     }
-    return errorResponse.throwError(`field ${field} is missing from the data.`);
+    isValid = checkRuleValidation(dataFieldValue, condition, condition_value);
+    results = {
+      validation: {
+        error: !isValid,
+        field,
+        field_value: dataFieldValue,
+        condition,
+        condition_value,
+      },
+    };
+    if (!isValid) {
+      throw new Error('validationFailedError', 400, `field ${field} failed validation.`, results);
+    }
+    return results;
   } catch (error) {
-    return errorResponse.throwError(error.message);
+    return error;
   }
 };
 

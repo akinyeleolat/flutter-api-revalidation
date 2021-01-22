@@ -1,14 +1,12 @@
-const SuccessResponse = require('../../helpers/successResponse');
-const BadRequestResponse = require('../../helpers/badRequestResponse');
-
 const userService = require('../../services/user/myinfo');
+const displayError = require('../../helpers/displayError');
 
 function myInfo(req, res) {
   try {
     const result = userService();
-    new SuccessResponse('My Rule-Validation API', result, 200).send(res);
+    return res.json(result).status(200);
   } catch (error) {
-    new BadRequestResponse(error.message).send(res);
+    return displayError(error, res, error.httpStatusCode);
   }
 }
 

@@ -30,6 +30,7 @@ const errorHandler = (error, req, res, next) => {
   }
 
   logger.error('Error %o', error);
+  console.log('handler', error);
   return res.json(error).status(error.httpStatusCode || 500);
 };
 

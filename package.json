@@ -21,10 +21,8 @@
     "compression": "^1.7.4",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "express-rate-limit": "^5.2.3",
     "helmet": "^4.3.1",
     "joi": "^17.3.0",
-    "throng": "^5.0.0",
     "winston": "^3.3.3"
   },
   "devDependencies": {

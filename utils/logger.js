@@ -1,14 +1,17 @@
 const { createLogger, transports, format } = require('winston');
-const { environment } = require('../config/app');
-
-const logLevel = environment === 'development' ? 'debug' : 'warn';
 
 const logger = createLogger({
+  level: 'info',
+  format: format.json(),
+  defaultMeta: {
+    service: 'flutter-api-revalidation',
+    time: new Date().toISOString(),
+  },
   transports: [
-    new transports.Console({
-      level: logLevel,
-      format: format.simple(),
-    }),
+    // - Write to all logs with level `info` and below to `combined.log`
+    // - Write all logs error (and below) to `error.log`.
+    new transports.File({ filename: 'error.log', level: 'error' }),
+    new transports.File({ filename: 'combined.log' }),
   ],
   exitOnError: false,
 });

@@ -1,4 +1,4 @@
-const errorResponse = require('./apiError');
+const Error = require('../utils/ErrorUtils');
 
 module.exports = function validatePayload(payload, data, optionalConfig = {}) {
   const { error, value } = payload.validate(data, {
@@ -13,7 +13,7 @@ module.exports = function validatePayload(payload, data, optionalConfig = {}) {
   });
   if (error) {
     const message = `${error.message}.`;
-    errorResponse.throwError(message);
+    throw new Error('validationError', 400, message);
   }
   return value;
 };

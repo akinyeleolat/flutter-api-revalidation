@@ -8,10 +8,10 @@ describe('Test routes', () => {
   const request = supertest(app);
 
   it('should return a 404 error if user inputs an incorrect route', async () => {
-    const response = await request.get(`${baseUrl}/ghhh`);
+    const response = await request.get(`${baseUrl}ghhh`);
 
     expect(response.status).toEqual(404);
     expect(response.body).toHaveProperty('message');
-    expect(response.body.message).toEqual('No resources/endpoint implemented for  GET / route access');
+    expect(response.body.message).toEqual('No resources/endpoint implemented for  GET /ghhh route access');
   });
 });

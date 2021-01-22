@@ -1,4 +1,4 @@
-const errorResponse = require('../../helpers/apiError');
+const Error = require('../../utils/ErrorUtils');
 
 const myData = {
   name: 'Oluwatosin Akinyele',
@@ -16,7 +16,7 @@ const userService = () => {
   try {
     return myData;
   } catch (error) {
-    return errorResponse.throwError(error.message);
+    throw new Error('dataError', 400, error.message);
   }
 };
 
