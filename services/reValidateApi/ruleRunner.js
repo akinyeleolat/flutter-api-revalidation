@@ -42,7 +42,7 @@ const ruleRunnerService = (ruleData) => {
   const dataFieldValue = getDataFieldValue(data, field);
 
   if (!dataFieldValue) {
-    throw new Error('badRequestError', 400, `field ${field} is missing from the data.`);
+    throw new Error('badRequestError', 400, `field ${field} is missing from data.`);
   }
   isValid = checkRuleValidation(dataFieldValue, condition, condition_value);
   results = {
@@ -55,7 +55,7 @@ const ruleRunnerService = (ruleData) => {
     },
   };
   if (!isValid) {
-    throw new Error('validationFailedError', 400, `field ${field} failed validation.`, results);
+    throw new Error('validationFailedError', 200, `field ${field} failed validation.`, results);
   }
   return results;
 };
